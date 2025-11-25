@@ -1,13 +1,31 @@
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+<head>
+    <title>Parallel Processing - Images</title>
+    <style>
+        #loading {
+            display: none;
+            font-weight: bold;
+        }
+        img {
+            width: 200px;
+            height: 300px;
+            margin: 5px;
+        }
+        #error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
 
-  <body>
-    <!-- the entire body must be written by student -->
+    <button id="download-images-button">Download and display images</button>
+
+    <div id="loading">Loading...</div>
+    <div id="error"></div>
     <div id="output"></div>
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+
+    <script src="./script.js"></script>
+</body>
 </html>
