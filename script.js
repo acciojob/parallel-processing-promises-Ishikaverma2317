@@ -1,7 +1,6 @@
 const output = document.getElementById("output");
+const loading = document.getElementById("loading");
 const errorDiv = document.getElementById("error");
-const loadingDiv = document.getElementById("loading");
-const btn = document.getElementById("download-images-button");
 
 const images = [
   { url: "https://picsum.photos/id/237/200/300" },
@@ -12,33 +11,33 @@ const images = [
 function downloadImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.src = url;
 
     img.onload = () => resolve(img);
-    img.onerror = () => reject(`Failed to load image: ${url}`);
+    img.onerror = () => reject("Failed to load image: " + url);
+
+    img.src = url;
   });
 }
 
-async function downloadImages() {
-  // safety check for Cypress
-  if (!output || !loadingDiv || !errorDiv) return;
-
-  loadingDiv.style.display = "block";
+function downloadImages() {
   output.innerHTML = "";
   errorDiv.innerText = "";
 
-  try {
-    const imageElements = await Promise.all(
-      images.map(img => downloadImage(img.url))
-    );
+  loading.style.display = "block";
 
-    loadingDiv.style.display = "none";
+  Promise.all(images.map(img => downloadImage(img.url)))
+    .then(imgElements => {
+      loading.style.display = "none";
 
-    imageElements.forEach(img => output.appendChild(img));
-  } catch (err) {
-    loadingDiv.style.display = "none";
-    errorDiv.innerText = err;
-  }
+      imgElements.forEach(img => output.appendChild(img));
+    })
+    .catch(err => {
+      loading.style.display = "none";
+      errorDiv.innerText = err;
+    });
 }
 
-btn.addEventListener("click", downloadImages);
+window.onload = () => {
+  const btn = document.getElementById("download-images-button");
+  btn.addEventListener("click", downloadImages);
+};
